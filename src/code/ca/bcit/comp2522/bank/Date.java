@@ -121,6 +121,23 @@ public final class Date {
 
     /**
      * gets the day of the week for the date using a formula.
+     * e.g. October 31 1977:
+     * step 1: calculate the number of twelves in 77:
+     * 6
+     * step 2: calculate the remainder from step 1: 77 - 12*6 = 77 - 72 =
+     * 5
+     * step 3: calculate the number of fours in step 2: 5/4 = 1.25, so
+     * 1
+     * step 4: add the day of the month to each step above: 31 + 6 + 5 + 1 =
+     * 43
+     * step 5: add the month code (for jfmamjjasond: 144025036146): for october it is 1: 43 + 1 =
+     * 44
+     * step 6: add the previous five numbers: (44) and mod by 7: 44%7 = 2 (44/7 = 6 remainder 2)
+     * step 7: sat sun mon tue wed thu fri is 0 1 2 3 4 5 6; our 2 means Oct 31 1977 was monday
+     * Extra notes:
+     * a) for January/February dates in leap years, add 6 at the start
+     * b) for all dates in the 2000s, add 6 at the start
+     * c) for all dates in the 1800s, add 2 at the start
      * @return the respective day of the week for that date as a string.
      */
     public final String getDayOfTheWeek() {

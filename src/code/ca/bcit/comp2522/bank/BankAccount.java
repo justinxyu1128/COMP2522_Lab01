@@ -7,9 +7,9 @@ package ca.bcit.comp2522.bank;
  */
 public final class BankAccount {
 
-    private static final int MIN_BALANCE_USD = 0;
-    private static final int DEFAULT_BALANCE_USD = 0;
-    private static final int MIN_DEPOSIT_OR_WITHDRAW_USD = 0;
+    private static final double MIN_BALANCE_USD = 0.00;
+    private static final double DEFAULT_BALANCE_USD = 0.00;
+    private static final double MIN_DEPOSIT_OR_WITHDRAW_USD = 0.00;
     private static final int MIN_VALUE_PIN = 0;
     private static final int MAX_VALUE_PIN = 9999;
     private static final int MIN_ACCOUNT_NUMBER_LENGTH = 6;
@@ -19,7 +19,7 @@ public final class BankAccount {
     private final Date accountClosed;
     private final int pin;
     private final String accountNumber;
-    private int balanceUsd;
+    private double balanceUsd;
     private final BankClient client;
 
     /**
@@ -32,7 +32,7 @@ public final class BankAccount {
      * @param client the client themselves and their information, represented by a BankClient object.
      */
     public BankAccount (final String accountNumber,
-                        final int balanceUsd,
+                        final double balanceUsd,
                         final Date accountOpened,
                         final Date accountClosed,
                         final int pin,
@@ -60,7 +60,7 @@ public final class BankAccount {
      * @param client the client themselves and their information, represented by a BankClient object.
      */
     public BankAccount(final String accountNumber,
-                       final int balanceUsd,
+                       final double balanceUsd,
                        final Date accountOpened,
                        final int pin,
                        final BankClient client)
@@ -96,14 +96,14 @@ public final class BankAccount {
      * @return the current balance of the client in a readable string format.
      */
     public final String getBalanceUsd() {
-        return String.format("Balance is USD$%d", this.balanceUsd);
+        return String.format("Balance is USD$%.2f", this.balanceUsd);
     }
 
     /**
      * Deposits USD dollars into the account.
      * @param amountUsd the amount of money to be deposited into the account in USD.
      */
-    public final void deposit(final int amountUsd) {
+    public final void deposit(final double amountUsd) {
         if(amountUsd > MIN_DEPOSIT_OR_WITHDRAW_USD) {
             this.balanceUsd += amountUsd;
         } else {
@@ -115,7 +115,7 @@ public final class BankAccount {
      * Withdraws USD dollars from the account.
      * @param amountUsd the amount of money to be withdrawn from the account in USD.
      */
-    public final void withdraw(final int amountUsd) {
+    public final void withdraw(final double amountUsd) {
         if(amountUsd > MIN_DEPOSIT_OR_WITHDRAW_USD) {
             if (this.balanceUsd >= amountUsd) {
                 this.balanceUsd -= amountUsd;
@@ -132,7 +132,7 @@ public final class BankAccount {
      * @param amountUsd the amount of money to be withdrawn from the account in USD.
      * @param pinToMatch the PIN value to be matched against the account's PIN to be used in authentication.
      */
-    public final void withdraw(final int amountUsd, final int pinToMatch) {
+    public final void withdraw(final double amountUsd, final int pinToMatch) {
         if(pinToMatch == this.pin) {
             if(amountUsd > MIN_DEPOSIT_OR_WITHDRAW_USD) {
                 if (this.balanceUsd >= amountUsd) {
@@ -158,7 +158,7 @@ public final class BankAccount {
         final StringBuilder detailsBuilder;
 
         detailsBuilder = new StringBuilder();
-        detailsBuilder.append(String.format("%s had $%d USD in account #%s which he opened on %s %s %02d, %d",
+        detailsBuilder.append(String.format("%s had $%.2f USD in account #%s which he opened on %s %s %02d, %d",
                 this.client.getName().getFullName(),
                 this.balanceUsd,
                 this.accountNumber,
@@ -197,7 +197,7 @@ public final class BankAccount {
      * @param balanceUsd the starting balance of the account as an integer.
      * @throws IllegalArgumentException if balance given is below zero(negative).
      */
-    private void validateBalanceUsd(int balanceUsd) {
+    private void validateBalanceUsd(double balanceUsd) {
         if (balanceUsd < MIN_BALANCE_USD) {
             throw new IllegalArgumentException("Balance cannot be negative. Balance entered in USD$" + balanceUsd);
         }
