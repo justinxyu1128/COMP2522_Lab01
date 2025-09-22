@@ -120,6 +120,7 @@ public final class Main {
         System.out.println("Withdrawing $USD: " + WITHDRAWN_USD_ALBERT_EINSTEIN);
         bankAccountAE.withdraw(WITHDRAWN_USD_ALBERT_EINSTEIN, PIN_ALBERT_EINSTEIN);
         System.out.println("New balance in USD: " + bankAccountAE.getBalanceUsd());
+        System.out.println();
 
         bankAccountNM = new BankAccount("654321",
                 BALANCE_USD_NELSON_MANDELA,
@@ -135,6 +136,7 @@ public final class Main {
         System.out.println("Withdrawing $USD: " + WITHDRAWN_USD_NELSON_MANDELA);
         bankAccountNM.withdraw(WITHDRAWN_USD_NELSON_MANDELA, PIN_NELSON_MANDELA);
         System.out.println("New balance in USD: " + bankAccountNM.getBalanceUsd());
+        System.out.println();
 
         bankAccountFK = new BankAccount("frd123",
                 BALANCE_USD_FRIDA_KAHLO,
@@ -151,6 +153,7 @@ public final class Main {
         System.out.println("Withdrawing $USD: " + WITHDRAWN_USD_FRIDA_KAHLO);
         bankAccountNM.withdraw(WITHDRAWN_USD_FRIDA_KAHLO, PIN_FRIDA_KAHLO);
         System.out.println("New balance in USD: " + bankAccountFK.getBalanceUsd());
+        System.out.println();
 
         bankAccountJC = new BankAccount("chan789",
                 BALANCE_USD_JACKIE_CHAN,

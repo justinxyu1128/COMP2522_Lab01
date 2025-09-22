@@ -86,21 +86,33 @@ public final class Date {
      * @return the instance variable "month" as a string.
      */
     public final String getMonth() {
-        return switch(month) {
-            case JANUARY -> "January";
-            case FEBRUARY -> "February";
-            case MARCH -> "March";
-            case APRIL -> "April";
-            case MAY -> "May";
-            case JUNE -> "June";
-            case JULY -> "July";
-            case AUGUST -> "August";
-            case SEPTEMBER -> "September";
-            case OCTOBER -> "October";
-            case NOVEMBER -> "November";
-            case DECEMBER -> "December";
-            default -> "Error month";
-        };
+        if (month == JANUARY) {
+            return "January";
+        } else if (month == FEBRUARY) {
+            return "February";
+        } else if (month == MARCH) {
+            return "March";
+        } else if (month == APRIL) {
+            return "April";
+        } else if (month == MAY) {
+            return "May";
+        } else if (month == JUNE) {
+            return "June";
+        } else if (month ==  JULY) {
+            return "July";
+        } else if (month == AUGUST) {
+            return "August";
+        } else if (month == SEPTEMBER) {
+            return "September";
+        } else if (month == OCTOBER) {
+            return "October";
+        } else if (month == NOVEMBER) {
+            return "November";
+        } else if (month == DECEMBER) {
+            return "December";
+        } else {
+            throw new IllegalArgumentException("Invalid month");
+        }
     }
 
     /**
@@ -161,16 +173,22 @@ public final class Date {
         formulaStep3 = formulaStep2 / DAY_OF_THE_WEEK_CONSTANT_TWO;
         dayOfTheWeek = (exceptionModifier + day + formulaStep1 + formulaStep2 + formulaStep3 + (int) ((MONTH_CODE / Math.pow(BASE_TEN, month - NTH_DIGIT_CONSTANT)) % BASE_TEN))
                 % DAY_OF_THE_WEEK_CONSTANT_THREE;
-        return switch(dayOfTheWeek) {
-            case MONDAY -> "Monday";
-            case TUESDAY -> "Tuesday";
-            case WEDNESDAY -> "Wednesday";
-            case THURSDAY -> "Thursday";
-            case FRIDAY -> "Friday";
-            case SATURDAY -> "Saturday";
-            case SUNDAY -> "Sunday";
-            default -> "error";
-        };
+
+        if (dayOfTheWeek == SATURDAY) {
+            return "Saturday";
+        } else if (dayOfTheWeek == SUNDAY) {
+            return "Sunday";
+        } else if ( dayOfTheWeek == MONDAY) {
+            return "Monday";
+        } else if (dayOfTheWeek == TUESDAY) {
+            return "Tuesday";
+        } else if (dayOfTheWeek == WEDNESDAY) {
+            return "Wednesday";
+        }  else if (dayOfTheWeek == THURSDAY) {
+            return "Thursday";
+        }  else if (dayOfTheWeek == FRIDAY) {
+            return "Friday";
+        } else throw new IllegalArgumentException("Invalid day");
     }
 
     /**
@@ -182,59 +200,54 @@ public final class Date {
      * or if month is not between 1 and 12, or if day is not within the number of days in the month, leap year exceptions included.
      */
     private static void validateDate(final int year, final int month, final int day) {
-        final String errorMessage;
-        final StringBuilder errorMessageBuilder;
-        boolean throwError;
+        StringBuilder errorMessageBuilder = new StringBuilder();
+        boolean throwError = false;
 
-        errorMessageBuilder = new StringBuilder();
-        throwError = false;
-
+        // Validate year
         if (year < MINIMUM_YEAR || year > CURRENT_YEAR) {
             throwError = true;
-            errorMessageBuilder.append(String.format("Year given must be between minimum year(%d) and the current year(%d).\n", MINIMUM_YEAR, CURRENT_YEAR));
+            errorMessageBuilder.append(String.format(
+                    "Year given must be between minimum year(%d) and the current year(%d).\n",
+                    MINIMUM_YEAR, CURRENT_YEAR));
         }
+
+        // Validate month
         if (month < JANUARY || month > DECEMBER) {
             throwError = true;
-            errorMessageBuilder.append(String.format("Month given must be between January(%d) and December(%d), displayed as an integer.\n", JANUARY, DECEMBER));
+            errorMessageBuilder.append(String.format(
+                    "Month given must be between January(%d) and December(%d), displayed as an integer.\n",
+                    JANUARY, DECEMBER));
         }
-        switch (month) {
-            case FEBRUARY:
-                if (isLeapYear(year)) {
-                    if (day < FIRST_DAY_OF_MONTH || day > LAST_DAY_OF_MONTH_FEBRUARY_LEAP_YEAR) {
-                        throwError = true;
-                        errorMessageBuilder.append(String.format("Day given must be between start(%d) and end of the month(%d). Year is a leap year.\n", FIRST_DAY_OF_MONTH, LAST_DAY_OF_MONTH_FEBRUARY_LEAP_YEAR));
-                    }
-                } else if (day < FIRST_DAY_OF_MONTH || day > LAST_DAY_OF_MONTH_FEBRUARY) {
-                    throwError = true;
-                    errorMessageBuilder.append(String.format("Day given must be between start(%d) and end of the month(%d).\n", FIRST_DAY_OF_MONTH, LAST_DAY_OF_MONTH_FEBRUARY));
-                }
-                break;
-            case APRIL:
-//                fallthrough
-            case JUNE:
-//                fallthrough
-            case SEPTEMBER:
-//                fallthrough
-            case NOVEMBER:
-                if (day < FIRST_DAY_OF_MONTH || day > LAST_DAY_OF_MONTH_THIRTY) {
-                    throwError = true;
-                    errorMessageBuilder.append(String.format("Day given must be between start(%d) and end of the month(%d).\n", FIRST_DAY_OF_MONTH, LAST_DAY_OF_MONTH_THIRTY));
-                }
-                break;
-            default:
-//                every other month or invalid month
-                if (day < FIRST_DAY_OF_MONTH || day > LAST_DAY_OF_MONTH_DEFAULT) {
-                    throwError = true;
-                    errorMessageBuilder.append(String.format("Day given must be between start(%d) and end of the month(%d).\n", FIRST_DAY_OF_MONTH, LAST_DAY_OF_MONTH_DEFAULT));
-                }
-                break;
+
+        // Validate day based on month
+        int maxDay;
+        if (month == FEBRUARY) {
+            maxDay = isLeapYear(year) ? LAST_DAY_OF_MONTH_FEBRUARY_LEAP_YEAR : LAST_DAY_OF_MONTH_FEBRUARY;
+        } else if (month == APRIL || month == JUNE || month == SEPTEMBER || month == NOVEMBER) {
+            maxDay = LAST_DAY_OF_MONTH_THIRTY;
+        } else {
+            maxDay = LAST_DAY_OF_MONTH_DEFAULT;
         }
+
+        if (day < FIRST_DAY_OF_MONTH || day > maxDay) {
+            throwError = true;
+            if (month == FEBRUARY && isLeapYear(year)) {
+                errorMessageBuilder.append(String.format(
+                        "Day given must be between start(%d) and end of the month(%d). Year is a leap year.\n",
+                        FIRST_DAY_OF_MONTH, LAST_DAY_OF_MONTH_FEBRUARY_LEAP_YEAR));
+            } else {
+                errorMessageBuilder.append(String.format(
+                        "Day given must be between start(%d) and end of the month(%d).\n",
+                        FIRST_DAY_OF_MONTH, maxDay));
+            }
+        }
+        // Throw exception if any errors were found
         if (throwError) {
-            errorMessageBuilder.append(String.format("Date given was: %d, %02d, %02d (Year, Month, Day)", year, month, day));
-            errorMessage = errorMessageBuilder.toString();
-            throw new IllegalArgumentException(errorMessage);
+            errorMessageBuilder.append(String.format(
+                    "Date given was: %d, %02d, %02d (Year, Month, Day)", year, month, day));
+            throw new IllegalArgumentException(errorMessageBuilder.toString());
         }
-    }
+}
 
     /**
      * Checks if the year is a leap year.
