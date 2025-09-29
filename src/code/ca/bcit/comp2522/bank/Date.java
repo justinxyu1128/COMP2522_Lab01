@@ -3,20 +3,34 @@ package ca.bcit.comp2522.bank;
 /**
  * This class represents a date.
  * @author Justin Yu
- * @author Tom
- * @version 1.0
+ * @author Tom Padilla
+ * @version 2025
  */
 
 public final class Date {
 
-    private static final int DEFAULT_INTEGER_ZERO = 0;
+    private static final int DEFAULT_INTEGER = 0;
+
     private static final int TWENTIETH_CENTURY = 2000;
     private static final int NINETEENTH_CENTURY = 1900;
     private static final int EIGHTEENTH_CENTURY = 1800;
-    private static final int EXCEPTION_MODIFIER_CONSTANT_ONE = 6;
-    private static final int EXCEPTION_MODIFIER_CONSTANT_TWO = 2;
+
+    private static final int EXCEPTION_MODIFIER_TWENTIETH_CENTURY = 6;
+    private static final int EXCEPTION_MODIFIER_EIGHTEENTH_CENTURY = 2;
+
+    private static final int HUNDREDTH_PLACE_DIGIT = 100;
+
+    private static final int MONTHS_PER_YEAR = 12;
+    private static final int WEEKS_PER_MONTH = 4;
+    private static final int DAYS_PER_WEEK = 7;
+
+    private static final int BASE_TEN = 10;
+    private static final int NTH_DIGIT_CONSTANT = 1;
+    private static final long MONTH_CODE = 641630520441L;
+
     private static final int CURRENT_YEAR = 2025;
     private static final int MINIMUM_YEAR = 1800;
+
     private static final int JANUARY = 1;
     private static final int FEBRUARY = 2;
     private static final int MARCH = 3;
@@ -29,22 +43,26 @@ public final class Date {
     private static final int OCTOBER = 10;
     private static final int NOVEMBER = 11;
     private static final int DECEMBER = 12;
+
     private static final int FIRST_DAY_OF_MONTH = 1;
-    private static final int LAST_DAY_OF_MONTH_DEFAULT = 31;
-    private static final int LAST_DAY_OF_MONTH_THIRTY = 30;
+
+    private static final int LAST_DAY_OF_MONTH_LONG = 31;
+
+//    Constant for number of days in a 30-day month
+    private static final int LAST_DAY_OF_MONTH_SHORT = 30;
+
+//    Constant for number of days in February
     private static final int LAST_DAY_OF_MONTH_FEBRUARY = 28;
+
+//    Constant for number of days in February during a leap year
     private static final int LAST_DAY_OF_MONTH_FEBRUARY_LEAP_YEAR = 29;
+
+//    Constants for calculating leap years
     private static final int LEAP_YEAR_DIVISIBLE = 4;
     private static final int DIVISIBLE = 0;
     private static final int CENTURY_YEAR = 100;
     private static final int LEAP_YEAR_DIVISIBLE_CENTURY_YEAR = 400;
-    private static final int HUNDREDTH_PLACE_DIGIT = 100;
-    private static final int DAY_OF_THE_WEEK_CONSTANT_ONE = 12;
-    private static final int DAY_OF_THE_WEEK_CONSTANT_TWO = 4;
-    private static final int DAY_OF_THE_WEEK_CONSTANT_THREE = 7;
-    private static final int BASE_TEN = 10;
-    private static final int NTH_DIGIT_CONSTANT = 1;
-    private static final long MONTH_CODE = 641630520441L;
+
     private static final int SATURDAY = 0;
     private static final int SUNDAY = 1;
     private static final int MONDAY = 2;
@@ -133,7 +151,7 @@ public final class Date {
 
     /**
      * gets the day of the week for the date using a formula.
-     * e.g. October 31 1977:
+     * e.g. October 31, 1977:
      * step 1: calculate the number of twelves in 77:
      * 6
      * step 2: calculate the remainder from step 1: 77 - 12*6 = 77 - 72 =
@@ -159,20 +177,25 @@ public final class Date {
         final int formulaStep3;
         int exceptionModifier;
 
-        exceptionModifier = DEFAULT_INTEGER_ZERO;
+        exceptionModifier = DEFAULT_INTEGER;
+
         if (year >= TWENTIETH_CENTURY) {
-            exceptionModifier += EXCEPTION_MODIFIER_CONSTANT_ONE;
+            exceptionModifier += EXCEPTION_MODIFIER_TWENTIETH_CENTURY;
         } else if (year >= EIGHTEENTH_CENTURY && year < NINETEENTH_CENTURY ) {
-            exceptionModifier += EXCEPTION_MODIFIER_CONSTANT_TWO;
+            exceptionModifier += EXCEPTION_MODIFIER_EIGHTEENTH_CENTURY;
         }
+
+
         if ((isLeapYear(year) && (month == JANUARY || month == FEBRUARY))) {
-            exceptionModifier += EXCEPTION_MODIFIER_CONSTANT_ONE;
+            exceptionModifier += EXCEPTION_MODIFIER_TWENTIETH_CENTURY;
         }
-        formulaStep1 = (year % HUNDREDTH_PLACE_DIGIT) / DAY_OF_THE_WEEK_CONSTANT_ONE;
-        formulaStep2 = (year % HUNDREDTH_PLACE_DIGIT) % DAY_OF_THE_WEEK_CONSTANT_ONE;
-        formulaStep3 = formulaStep2 / DAY_OF_THE_WEEK_CONSTANT_TWO;
+
+
+        formulaStep1 = (year % HUNDREDTH_PLACE_DIGIT) / MONTHS_PER_YEAR;
+        formulaStep2 = (year % HUNDREDTH_PLACE_DIGIT) % MONTHS_PER_YEAR;
+        formulaStep3 = formulaStep2 / WEEKS_PER_MONTH;
         dayOfTheWeek = (exceptionModifier + day + formulaStep1 + formulaStep2 + formulaStep3 + (int) ((MONTH_CODE / Math.pow(BASE_TEN, month - NTH_DIGIT_CONSTANT)) % BASE_TEN))
-                % DAY_OF_THE_WEEK_CONSTANT_THREE;
+                % DAYS_PER_WEEK;
 
         if (dayOfTheWeek == SATURDAY) {
             return "Saturday";
@@ -199,9 +222,15 @@ public final class Date {
      * @throws IllegalArgumentException if year is not between the minimum year and the current year inclusive,
      * or if month is not between 1 and 12, or if day is not within the number of days in the month, leap year exceptions included.
      */
-    private static void validateDate(final int year, final int month, final int day) {
-        StringBuilder errorMessageBuilder = new StringBuilder();
-        boolean throwError = false;
+    private static void validateDate(final int year,
+                                     final int month,
+                                     final int day)
+    {
+        final StringBuilder errorMessageBuilder;
+        boolean throwError;
+
+        errorMessageBuilder = new StringBuilder();
+        throwError = false;
 
         // Validate year
         if (year < MINIMUM_YEAR || year > CURRENT_YEAR) {
@@ -221,30 +250,41 @@ public final class Date {
 
         // Validate day based on month
         int maxDay;
+
         if (month == FEBRUARY) {
             maxDay = isLeapYear(year) ? LAST_DAY_OF_MONTH_FEBRUARY_LEAP_YEAR : LAST_DAY_OF_MONTH_FEBRUARY;
         } else if (month == APRIL || month == JUNE || month == SEPTEMBER || month == NOVEMBER) {
-            maxDay = LAST_DAY_OF_MONTH_THIRTY;
+            maxDay = LAST_DAY_OF_MONTH_SHORT;
         } else {
-            maxDay = LAST_DAY_OF_MONTH_DEFAULT;
+            maxDay = LAST_DAY_OF_MONTH_LONG;
         }
 
         if (day < FIRST_DAY_OF_MONTH || day > maxDay) {
             throwError = true;
+
             if (month == FEBRUARY && isLeapYear(year)) {
                 errorMessageBuilder.append(String.format(
                         "Day given must be between start(%d) and end of the month(%d). Year is a leap year.\n",
-                        FIRST_DAY_OF_MONTH, LAST_DAY_OF_MONTH_FEBRUARY_LEAP_YEAR));
+                        FIRST_DAY_OF_MONTH,
+                        LAST_DAY_OF_MONTH_FEBRUARY_LEAP_YEAR
+
+                ));
             } else {
                 errorMessageBuilder.append(String.format(
                         "Day given must be between start(%d) and end of the month(%d).\n",
-                        FIRST_DAY_OF_MONTH, maxDay));
+                        FIRST_DAY_OF_MONTH,
+                        maxDay
+                ));
             }
         }
         // Throw exception if any errors were found
         if (throwError) {
             errorMessageBuilder.append(String.format(
-                    "Date given was: %d, %02d, %02d (Year, Month, Day)", year, month, day));
+                    "Date given was: %d, %02d, %02d (Year, Month, Day)",
+                    year,
+                    month,
+                    day
+            ));
             throw new IllegalArgumentException(errorMessageBuilder.toString());
         }
 }
@@ -255,7 +295,7 @@ public final class Date {
      * @return whether the year is a leap year or not as a boolean.
      */
     private static boolean isLeapYear(final int year) {
-        return year % LEAP_YEAR_DIVISIBLE == DIVISIBLE && (!(year % CENTURY_YEAR == DIVISIBLE)
-                || (year % LEAP_YEAR_DIVISIBLE_CENTURY_YEAR == DIVISIBLE));
+        return year % LEAP_YEAR_DIVISIBLE == DIVISIBLE && (!(year % CENTURY_YEAR == DIVISIBLE) ||
+                (year % LEAP_YEAR_DIVISIBLE_CENTURY_YEAR == DIVISIBLE));
     }
 }

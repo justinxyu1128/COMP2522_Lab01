@@ -26,7 +26,12 @@ public class BankClient {
      * @param signupDate the date the client joined the bank
      * @param clientId the client's unique ID (6 or 7 characters)
      */
-    public BankClient(final Name name, final Date birthDate, final Date deathDate, final Date signupDate, final String clientId)
+    public BankClient(final Name name,
+                      final Date birthDate,
+                      final Date deathDate,
+                      final Date signupDate,
+                      final String clientId
+    )
     {
         this.name = name;
         this.birthDate = birthDate;
@@ -36,7 +41,12 @@ public class BankClient {
 
     }
 
-    public BankClient(final Name name, final Date birthDate, final Date signupDate, final String clientId) {
+    public BankClient(final Name name,
+                      final Date birthDate,
+                      final Date signupDate,
+                      final String clientId
+    )
+    {
         this.name = name;
         this.birthDate = birthDate;
         this.clientId = clientId;

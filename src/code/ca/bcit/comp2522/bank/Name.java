@@ -10,8 +10,13 @@ package ca.bcit.comp2522.bank;
  */
 public class Name {
 
-    private static final int max_length = 44;
-    private static final String Space = " ";
+//    Constant for maximum length of a name
+    private static final int MAX_LENGTH = 44;
+
+//    Constant for name left blank
+    private static final String SPACE = " ";
+
+//    constant for String "admin"
     private static final String ADMIN_FORB = "admin";
 
     private final String firstName;
@@ -24,11 +29,14 @@ public class Name {
      * @param lastName  the last name,
      * @throws IllegalArgumentException if names are = blank, admin, or are too long.
      */
-    public Name(final String firstName, String lastName) {
+    public Name(final String firstName,
+                String lastName
+    )
+    {
         this.firstName = firstName;
         this.lastName = lastName;
 
-        if (firstName.equals(Space) || lastName.equals(Space)) {
+        if (firstName.equals(SPACE) || lastName.equals(SPACE)) {
             throw new IllegalArgumentException("Name cannot be blank");
         }
 
@@ -36,7 +44,7 @@ public class Name {
             throw new IllegalArgumentException("Name cannot be admin");
         }
 
-        if (firstName.length() + lastName.length() > max_length) {
+        if (firstName.length() + lastName.length() > MAX_LENGTH) {
             throw new IllegalArgumentException("Name too long");
         }
 
@@ -48,7 +56,9 @@ public class Name {
      * @return initials like A.E
      */
     public String getInitials() {
-        return (String.valueOf(firstName.charAt(0)) + lastName.charAt(0)).toUpperCase();
+
+        return (String.valueOf(firstName.charAt(0)) +
+                lastName.charAt(0)).toUpperCase();
     }
 
     /**
@@ -57,7 +67,11 @@ public class Name {
      * @return the full name
      */
     public String getFullName() {
-        return Character.toUpperCase(firstName.charAt(0)) + firstName.substring(1).toLowerCase() + " " + Character.toUpperCase(lastName.charAt(0)) + lastName.substring(1).toLowerCase();
+        return Character.toUpperCase(firstName.charAt(0)) +
+                firstName.substring(1).toLowerCase() +
+                " " +
+                Character.toUpperCase(lastName.charAt(0)) +
+                lastName.substring(1).toLowerCase();
     }
 
     /**
@@ -66,6 +80,8 @@ public class Name {
      * @return the reversed named string.
      */
     public String getReverseName() {
-        return new StringBuilder(firstName + " " + lastName).reverse().toString();
+
+        return new StringBuilder(firstName + " " +
+                lastName).reverse().toString();
     }
 }

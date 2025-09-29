@@ -1,15 +1,18 @@
 package ca.bcit.comp2522.bank;
+
 /**
  * This class models a bank account.
+ *
  * @author Justin Yu
- * @author Tom
- * @version 1.0
+ * @author Tom Padilla
+ * @version 2025
  */
 public final class BankAccount {
 
     private static final double MIN_BALANCE_USD = 0.00;
     private static final double DEFAULT_BALANCE_USD = 0.00;
-    private static final double MIN_DEPOSIT_OR_WITHDRAW_USD = 0.00;
+    private static final double MIN_DEPOSIT_USD = 0.00;
+    private static final double MIN_WITHDRAW_USD = 0.00;
     private static final int MIN_VALUE_PIN = 0;
     private static final int MAX_VALUE_PIN = 9999;
     private static final int MIN_ACCOUNT_NUMBER_LENGTH = 6;
@@ -24,20 +27,20 @@ public final class BankAccount {
 
     /**
      * Constructor for BankAccount class. Initializes instance variables.
-     * @param accountNumber representing the account number of the client as a string of length 6 or 7.
-     * @param balanceUsd the numeric value for the current balance of the client.
+     *
+     * @param accountNumber representing the account number of the client as a string.
+     * @param balanceUsd    the numeric value for the current balance of the client.
      * @param accountOpened the date when the account was opened, represented by a Date object.
      * @param accountClosed the date when the account was closed, represented by a Date object.
-     * @param pin the numeric value for the PIN of the client. Must be between 0 and 9999 inclusive.
-     * @param client the client themselves and their information, represented by a BankClient object.
+     * @param pin           the numeric value for the PIN of the client.
+     * @param client        the client themselves and their information, represented by a BankClient object.
      */
-    public BankAccount (final String accountNumber,
-                        final double balanceUsd,
-                        final Date accountOpened,
-                        final Date accountClosed,
-                        final int pin,
-                        final BankClient client)
-    {
+    public BankAccount(final String accountNumber,
+                       final double balanceUsd,
+                       final Date accountOpened,
+                       final Date accountClosed,
+                       final int pin,
+                       final BankClient client) {
         validateAccountNumber(accountNumber);
         validateBalanceUsd(balanceUsd);
         validatePin(pin);
@@ -53,46 +56,49 @@ public final class BankAccount {
     /**
      * Overloaded constructor for BankAccount class. Initializes instance variables.
      * Replaces "accountClosed" Date with null if the account was never closed.
-     * @param accountNumber representing the account number of the client as a string of length 6 or 7.
-     * @param balanceUsd the numeric value for the current balance of the client.
+     *
+     * @param accountNumber representing the account number of the client as a string.
+     * @param balanceUsd    the numeric value for the current balance of the client.
      * @param accountOpened the date when the account was opened, represented by a Date object.
-     * @param pin the numeric value for the PIN of the client. Must be between 0 and 9999 inclusive.
-     * @param client the client themselves and their information, represented by a BankClient object.
+     * @param pin           the numeric value for the PIN of the client.
+     * @param client        the client themselves and their information, represented by a BankClient object.
      */
     public BankAccount(final String accountNumber,
                        final double balanceUsd,
                        final Date accountOpened,
                        final int pin,
-                       final BankClient client)
-    {
+                       final BankClient client) {
         this(accountNumber, balanceUsd, accountOpened, null, pin, client);
     }
 
     /**
      * Overloaded constructor for BankAccount class. Initializes instance variables.
-     * Replaces "balanceUsd" int with default balance of USD$0 if a value is not given.
-     * @param accountNumber representing the account number of the client as a string of length 6 or 7.
+     * Replaces "balanceUsd" int with default empty balance if a value is not given.
+     *
+     * @param accountNumber representing the account number of the client as a string.
      * @param accountOpened the date when the account was opened, represented by a Date object.
-     * @param pin the numeric value for the PIN of the client. Must be between 0 and 9999 inclusive.
-     * @param client the client themselves and their information, represented by a BankClient object.
+     * @param pin           the numeric value for the PIN of the client.
+     * @param client        the client themselves and their information, represented by a BankClient object.
      */
     public BankAccount(final String accountNumber,
                        final Date accountOpened,
                        final int pin,
-                       final BankClient client)
-    {
+                       final BankClient client) {
         this(accountNumber, DEFAULT_BALANCE_USD, accountOpened, null, pin, client);
     }
 
     /**
      * getter method for the client.
+     *
      * @return the current client as a BankClient object.
      */
     public final BankClient getClient() {
         return this.client;
     }
+
     /**
      * getter method for current balance of the client.
+     *
      * @return the current balance of the client in a readable string format.
      */
     public final String getBalanceUsd() {
@@ -101,10 +107,12 @@ public final class BankAccount {
 
     /**
      * Deposits USD dollars into the account.
+     *
      * @param amountUsd the amount of money to be deposited into the account in USD.
      */
     public final void deposit(final double amountUsd) {
-        if(amountUsd > MIN_DEPOSIT_OR_WITHDRAW_USD) {
+
+        if (amountUsd > MIN_DEPOSIT_USD) {
             this.balanceUsd += amountUsd;
         } else {
             throw new IllegalArgumentException("Amount to deposit is too low: " + amountUsd);
@@ -113,15 +121,19 @@ public final class BankAccount {
 
     /**
      * Withdraws USD dollars from the account.
+     *
      * @param amountUsd the amount of money to be withdrawn from the account in USD.
      */
     public final void withdraw(final double amountUsd) {
-        if(amountUsd > MIN_DEPOSIT_OR_WITHDRAW_USD) {
+
+        if (amountUsd > MIN_WITHDRAW_USD) {
+
             if (this.balanceUsd >= amountUsd) {
                 this.balanceUsd -= amountUsd;
             } else {
                 throw new IllegalArgumentException("Amount to withdraw is too high: " + amountUsd);
             }
+
         } else {
             throw new IllegalArgumentException("Amount to withdraw is too low: " + amountUsd);
         }
@@ -129,20 +141,25 @@ public final class BankAccount {
 
     /**
      * Withdraws USD dollars from the account. Uses a PIN value to authenticate the transaction.
-     * @param amountUsd the amount of money to be withdrawn from the account in USD.
+     *
+     * @param amountUsd  the amount of money to be withdrawn from the account in USD.
      * @param pinToMatch the PIN value to be matched against the account's PIN to be used in authentication.
      */
-    public final void withdraw(final double amountUsd, final int pinToMatch) {
-        if(pinToMatch == this.pin) {
-            if(amountUsd > MIN_DEPOSIT_OR_WITHDRAW_USD) {
+    public final void withdraw(final double amountUsd,
+                               final int pinToMatch) {
+
+        if (pinToMatch == this.pin) {
+            if (amountUsd > MIN_WITHDRAW_USD) {
                 if (this.balanceUsd >= amountUsd) {
                     this.balanceUsd -= amountUsd;
                 } else {
                     throw new IllegalArgumentException("Amount to withdraw is too high: " + amountUsd);
                 }
+
             } else {
                 throw new IllegalArgumentException("Amount to withdraw is too low: " + amountUsd);
             }
+
         } else {
             throw new IllegalArgumentException("Wrong PIN: " + pinToMatch);
         }
@@ -150,10 +167,12 @@ public final class BankAccount {
 
     /**
      * Returns the details of the account and the client.
+     *
      * @return the full name, current balance in USD, account number,
      * date of account opening, and date of account closing as a string.
      */
     public final String getDetails() {
+
         final String details;
         final StringBuilder detailsBuilder;
 
@@ -167,6 +186,7 @@ public final class BankAccount {
                 this.accountOpened.getDay(),
                 this.accountOpened.getYear()
         ));
+
         if (this.accountClosed != null) {
             detailsBuilder.append(String.format(" and closed %s %s %02d, %d.",
                     this.accountClosed.getDayOfTheWeek(),
@@ -177,43 +197,52 @@ public final class BankAccount {
         } else {
             detailsBuilder.append(".");
         }
+
         details = detailsBuilder.toString();
         return details;
     }
 
     /**
      * Validates the PIN given.
+     *
      * @param pin the PIN to be validated as an integer value.
-     * @throws IllegalArgumentException if PIN given is not between 0 and 9999 inclusive.
+     * @throws IllegalArgumentException if PIN given is invalid.
      */
     private void validatePin(int pin) {
+
         if (pin < MIN_VALUE_PIN || pin > MAX_VALUE_PIN) {
-            throw new IllegalArgumentException("Invalid PIN. PIN must be between 0 and 9999 inclusive. PIN entered: " + pin);
+            throw new IllegalArgumentException("Invalid PIN. PIN entered: " + pin);
         }
     }
 
     /**
      * Validates the balance given.
+     *
      * @param balanceUsd the starting balance of the account as an integer.
-     * @throws IllegalArgumentException if balance given is below zero(negative).
+     * @throws IllegalArgumentException if balance given is lower than minimum.
      */
     private void validateBalanceUsd(double balanceUsd) {
+
         if (balanceUsd < MIN_BALANCE_USD) {
-            throw new IllegalArgumentException("Balance cannot be negative. Balance entered in USD$" + balanceUsd);
+            throw new IllegalArgumentException("Balance cannot be lower than minimum. Balance entered in USD$" + balanceUsd);
         }
     }
 
     /**
      * Validates the account number given.
+     *
      * @param accountNumber the account number given as a string.
-     * @throws IllegalArgumentException if account number contains whitespace or is not a string with length 6 or 7.
+     * @throws IllegalArgumentException if account number contains whitespace or is out of bounds.
      */
     private void validateAccountNumber(String accountNumber) {
+
         if (accountNumber.contains(" ")) {
             throw new IllegalArgumentException("Account number cannot contain whitespace. Account number entered: " + accountNumber);
         }
-        if (accountNumber.length() < MIN_ACCOUNT_NUMBER_LENGTH || accountNumber.length() > MAX_ACCOUNT_NUMBER_LENGTH) {
-            throw new IllegalArgumentException("Account number must be either 6 or 7 characters long. Account number: " + accountNumber);
+
+        if (accountNumber.length() < MIN_ACCOUNT_NUMBER_LENGTH ||
+                accountNumber.length() > MAX_ACCOUNT_NUMBER_LENGTH) {
+            throw new IllegalArgumentException("Account number out of bounds. Account number: " + accountNumber);
         }
     }
 }

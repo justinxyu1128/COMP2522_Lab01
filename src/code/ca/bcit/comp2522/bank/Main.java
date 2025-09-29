@@ -2,44 +2,52 @@ package ca.bcit.comp2522.bank;
 /**
  * This class tests several classes: Name, Date, BankClient, BankAccount.
  * @author Justin Yu
- * @author Tom
- * @version 1.0
+ * @author Tom Padilla
+ * @version 2025
  */
 public final class Main {
 
+    //Constants for a person's PINs.
     private static final int PIN_ALBERT_EINSTEIN = 3141;
     private static final int PIN_NELSON_MANDELA = 4664;
     private static final int PIN_FRIDA_KAHLO = 1907;
     private static final int PIN_JACKIE_CHAN = 1954;
 
+    //Constants for a person's account balance.
     private static final double BALANCE_USD_ALBERT_EINSTEIN = 1000.00;
     private static final double BALANCE_USD_NELSON_MANDELA = 2000.00;
     private static final double BALANCE_USD_FRIDA_KAHLO = 500.00;
     private static final double BALANCE_USD_JACKIE_CHAN = 3000.00;
 
+    //  Cosntants for amount withdrawn from a person's account
     private static final double WITHDRAWN_USD_ALBERT_EINSTEIN = 100.00;
     private static final double WITHDRAWN_USD_NELSON_MANDELA = 200.00;
     private static final double WITHDRAWN_USD_FRIDA_KAHLO = 50.00;
     private static final double WITHDRAWN_USD_JACKIE_CHAN = 500.00;
 
+//    Constants for a client's signup date
     private static final Date SIGNUP_DATE_ALBERT_EINSTEIN = new Date(1900, 1, 1);
     private static final Date SIGNUP_DATE_NELSON_MANDELA = new Date(1994, 5, 10);
     private static final Date SIGNUP_DATE_FRIDA_KAHLO = new Date(1940, 1, 1);
     private static final Date SIGNUP_DATE_JACKIE_CHAN = new Date(1980, 10, 1);
 
+//    Constants for a client's account opened date
     private static final Date ACCOUNT_OPENED_ALBERT_EINSTEIN = new Date(1900, 1, 1);
     private static final Date ACCOUNT_OPENED_NELSON_MANDELA = new Date(1994, 5, 10);
     private static final Date ACCOUNT_OPENED_FRIDA_KAHLO = new Date(1940, 1, 1);
     private static final Date ACCOUNT_OPENED_JACKIE_CHAN = new Date(1980, 10, 1);
 
+//   Constants for a client's account closed date.
     private static final Date ACCOUNT_CLOSED_ALBERT_EINSTEIN = new Date(1950, 10, 14);
     private static final Date ACCOUNT_CLOSED_FRIDA_KAHLO = new Date(1954, 7, 13);
 
+//    Constants for a person's birthdate
     private static final Date BIRTH_DATE_ALBERT_EINSTEIN = new Date(1879, 3, 14);
     private static final Date BIRTH_DATE_NELSON_MANDELA = new Date(1918, 7, 18);
     private static final Date BIRTH_DATE_FRIDA_KAHLO = new Date(1907, 7, 6);
     private static final Date BIRTH_DATE_JACKIE_CHAN = new Date(1954, 4, 7);
 
+//    Constants for a person's deathdate.
     private static final Date DEATH_DATE_ALBERT_EINSTEIN = new Date(1955, 4, 18);
     private static final Date DEATH_DATE_NELSON_MANDELA = new Date(2013, 12, 5);
     private static final Date DEATH_DATE_FRIDA_KAHLO = new Date(1954, 7, 13);
@@ -112,9 +120,11 @@ public final class Main {
                 PIN_ALBERT_EINSTEIN,
                 clientAE
         );
+
         System.out.println("Initials: " + bankAccountAE.getClient().getName().getInitials());
         System.out.println("Full name: " + bankAccountAE.getClient().getName().getFullName());
         System.out.println("Reversed name: " + bankAccountAE.getClient().getName().getReverseName());
+
         System.out.println("Client details: " + bankAccountAE.getClient().getDetails());
         System.out.println("Account details: " + bankAccountAE.getDetails());
         System.out.println("Withdrawing $USD: " + WITHDRAWN_USD_ALBERT_EINSTEIN);
@@ -128,9 +138,11 @@ public final class Main {
                 PIN_NELSON_MANDELA,
                 clientNM
         );
+
         System.out.println("Initials: " + bankAccountNM.getClient().getName().getInitials());
         System.out.println("Full name: " + bankAccountNM.getClient().getName().getFullName());
         System.out.println("Reversed name: " + bankAccountNM.getClient().getName().getReverseName());
+
         System.out.println("Client details: " + bankAccountNM.getClient().getDetails());
         System.out.println("Account details: " + bankAccountNM.getDetails());
         System.out.println("Withdrawing $USD: " + WITHDRAWN_USD_NELSON_MANDELA);
@@ -145,13 +157,15 @@ public final class Main {
                 PIN_FRIDA_KAHLO,
                 clientFK
         );
+
         System.out.println("Initials: " + bankAccountFK.getClient().getName().getInitials());
         System.out.println("Full name: " + bankAccountFK.getClient().getName().getFullName());
         System.out.println("Reversed name: " + bankAccountFK.getClient().getName().getReverseName());
+
         System.out.println("Client details: " + bankAccountFK.getClient().getDetails());
         System.out.println("Account details: " + bankAccountFK.getDetails());
         System.out.println("Withdrawing $USD: " + WITHDRAWN_USD_FRIDA_KAHLO);
-        bankAccountNM.withdraw(WITHDRAWN_USD_FRIDA_KAHLO, PIN_FRIDA_KAHLO);
+        bankAccountFK.withdraw(WITHDRAWN_USD_FRIDA_KAHLO, PIN_FRIDA_KAHLO);
         System.out.println("New balance in USD: " + bankAccountFK.getBalanceUsd());
         System.out.println();
 
@@ -161,13 +175,15 @@ public final class Main {
                 PIN_JACKIE_CHAN,
                 clientJC
         );
+
         System.out.println("Initials: " + bankAccountJC.getClient().getName().getInitials());
         System.out.println("Full name: " + bankAccountJC.getClient().getName().getFullName());
         System.out.println("Reversed name: " + bankAccountJC.getClient().getName().getReverseName());
+
         System.out.println("Client details: " + bankAccountJC.getClient().getDetails());
         System.out.println("Account details: " + bankAccountJC.getDetails());
         System.out.println("Withdrawing $USD: " + WITHDRAWN_USD_JACKIE_CHAN);
-        bankAccountNM.withdraw(WITHDRAWN_USD_JACKIE_CHAN, PIN_JACKIE_CHAN);
+        bankAccountJC.withdraw(WITHDRAWN_USD_JACKIE_CHAN, PIN_JACKIE_CHAN);
         System.out.println("New balance in USD: " + bankAccountJC.getBalanceUsd());
     }
 }
